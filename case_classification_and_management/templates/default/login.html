@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    {% load static %} {% include "includes.html" %}
+    <script>
+      function showClient() {
+        var lawyer = document.getElementById("lawyer");
+        var client = document.getElementById("client");
+        lawyer.hidden = true;
+        client.hidden = false;
+        document.getElementById("lawyerButton").hidden = true;
+        document.getElementById("clientButton").hidden = false;
+      }
+
+      function showLawyer() {
+        var lawyer = document.getElementById("lawyer");
+        var client = document.getElementById("client");
+        lawyer.hidden = false;
+        client.hidden = true;
+        document.getElementById("clientButton").hidden = true;
+        document.getElementById("lawyerButton").hidden = false;
+      }
+    </script>
+    <style>
+      body {
+        background-image: url("{% static 'images/login_page_background.jpg' %}");
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+
+      .navbar-nav.ml-auto {
+        margin-left: auto;
+      }
+
+      .navbar-nav.ml-auto .nav-item {
+        margin-right: 15px;
+      }
+
+      .hover-animation {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hover-animation::after {
+        content: "";
+        display: block;
+        height: 4px;
+        width: 100%;
+        background-color: #2bd576;
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+      }
+
+      .hover-animation:hover::after {
+        transform: scaleX(1);
+      }
+
+      #top_icon {
+        font-size: x-large;
+      }
+
+      @keyframes fade-in {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes slide-in-left {
+        from {
+          transform: translateX(-100%);
+        }
+        to {
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes slide-in-right {
+        from {
+          transform: translateX(100%);
+        }
+        to {
+          transform: translateX(0);
+        }
+      }
+
+      #lawyer,
+      #client {
+        animation-duration: 0.5s;
+        animation-timing-function: ease-in-out;
+      }
+
+      #lawyer {
+        animation-name: slide-in-left;
+      }
+
+      #client {
+        animation-name: slide-in-right;
+      }
+
+      .container {
+        overflow-x: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container mt-2">
+      <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+          <a
+            class="navbar-brand text-white"
+            id="top_icon"
+            href="{% url 'home' %}"
+          >
+            Case Classification & Management</a
+          >
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mb-2 ml-auto mb-lg-0">
+              <li class="nav-item">
+                <a
+                  class="nav-link text-white {% if active %} active {% endif %} hover-animation"
+                  href="{% url 'home' %}"
+                  >Home</a
+                >
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link text-white {% if l_active %} active {% endif %} hover-animation"
+                  href="{% url 'login' %}"
+                  >Login</a
+                >
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link text-white hover-animation"
+                  href="{% url 'register' %}"
+                  >Register</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </div>
+    <div class="container mt-5">
+      <div class="row">
+        <div id="lawyer" class="col-6">
+          <div class="card shadow" style="border-radius: 25px">
+            <div class="card-body">
+              <h2 class="text-center">
+                Lawyer Login
+                <img
+                  style="height: 33px; width: 33px"
+                  src="{% static 'images/lawyer.png' %}"
+                />
+                <hr />
+              </h2>
+              <div class="row">
+                <form action="{% url 'login' %}" method="post">
+                  {% csrf_token %}
+                  <div class="col-12">
+                    <div class="mb-3">
+                      <label for="username" class="form-label">Username</label>
+                      <input
+                        required
+                        type="text"
+                        class="form-control"
+                        name="username"
+                        id="username"
+                        aria-describedby="helpId"
+                        placeholder="Enter your username"
+                      />
+                    </div>
+                    <div class="mb-2">
+                      <label for="password" class="form-label">Password</label>
+                      <input
+                        required
+                        type="password"
+                        class="form-control"
+                        name="password"
+                        id="password"
+                        aria-describedby="helpId"
+                        placeholder="Enter your password"
+                      />
+                    </div>
+                    <a href="{% url 'register' %}" class="text-secondary">
+                      Don't have an account? Register Now!
+                    </a>
+                    <div
+                      class="d-flex mt-4 justify-content-center align-items-center"
+                    >
+                      <button type="submit" class="btn btn-success">
+                        Submit
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="card-footer d-flex justify-content-end align-items-end">
+              <button
+                id="lawyerButton"
+                class="btn btn-primary"
+                onclick="showClient()"
+              >
+                Client? Login Here!
+              </button>
+            </div>
+          </div>
+        </div>
+        <div id="client" class="col-6 offset-6" hidden>
+          <div class="card shadow" style="border-radius: 25px">
+            <div class="card-body">
+              <h2 class="text-center">
+                Client Login
+                <img
+                  style="height: 33px; width: 33px"
+                  src="{% static 'images/lawyer.png' %}"
+                />
+                <hr />
+              </h2>
+              <div class="row">
+                <form action="{% url 'login' %}" method="post">
+                  {% csrf_token %}
+                  <div class="col-12">
+                    <div class="mb-3">
+                      <label for="username" class="form-label">Username</label>
+                      <input
+                        required
+                        type="text"
+                        class="form-control"
+                        name="username"
+                        id="username"
+                        aria-describedby="helpId"
+                        placeholder="Enter your username"
+                      />
+                    </div>
+                    <div class="mb-2">
+                      <label for="password" class="form-label">Password</label>
+                      <input
+                        required
+                        type="password"
+                        class="form-control"
+                        name="password"
+                        id="password"
+                        aria-describedby="helpId"
+                        placeholder="Enter your password"
+                      />
+                    </div>
+                    <a href="{% url 'register' %}" class="text-secondary">
+                      Don't have an account? Register Now!
+                    </a>
+                    <div
+                      class="d-flex mt-4 justify-content-center align-items-center"
+                    >
+                      <button type="submit" class="btn btn-success">
+                        Submit
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div
+              class="card-footer d-flex justify-content-start align-items-start"
+            >
+              <button
+                id="clientButton"
+                class="btn btn-primary"
+                onclick="showLawyer()"
+              >
+                Lawyer? Login Here!
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% if error_message %}
+    <script>
+      swal("Error!", "Invalid username or password!", "error");
+    </script>
+    {% endif %}
+  </body>
+</html>

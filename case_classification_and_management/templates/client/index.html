@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Client Home</title>
+    {% load static %} {% include "includes.html" %}
+    <style>
+      .navbar-nav.ml-auto {
+        margin-left: auto;
+      }
+
+      .navbar-nav.ml-auto .nav-item {
+        margin-right: 15px;
+      }
+
+      .hover-animation {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hover-animation::after {
+        content: "";
+        display: block;
+        height: 4px;
+        width: 100%;
+        background-color: #2bd576;
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+      }
+
+      .hover-animation:hover::after {
+        transform: scaleX(1);
+      }
+
+      #top_icon {
+        font-size: x-large;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container mt-2">
+      <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+          <a
+            class="navbar-brand text-dark"
+            id="top_icon"
+            href="{% url 'client_home' %}"
+          >
+            Welcome, {{request.user.username}}</a
+          >
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mb-2 ml-auto mb-lg-0">
+              <li class="nav-item">
+                <a
+                  class="nav-link text-dark hover-animation"
+                  href="{% url 'logout' %}"
+                  >Logout</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </div>
+    <hr />
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col-xl-6 offset-xl-3 col-8 offset-2">
+          <div class="card shadow">
+            <div class="card-body">
+              <h2 class="text-muted text-center">Enter Details</h2>
+              <hr />
+              <form
+                action="{% url 'client_home' %}"
+                method="post"
+                enctype="multipart/form-data"
+              >
+                {% csrf_token %}
+                <div class="mb-3">
+                  <label for="pdf_file" class="form-label">Upload Pdf</label>
+                  <input
+                    type="file"
+                    class="form-control"
+                    name="pdf_file"
+                    id="pdf_file"
+                    placeholder="Upload your pdf file here."
+                    aria-describedby="fileHelpId"
+                    accept=".pdf"
+                  />
+                </div>
+                <div class="row">
+                  <div
+                    class="col-12 d-flex justify-content-center align-items-center"
+                  >
+                    <button class="btn btn-success" type="submit">
+                      Submit
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container mt-5">
+      <div class="row">
+        {% if lawyers %} {% for l in lawyers %}
+        <div class="col-4">
+          <div class="card">
+            <div class="card-body">
+              <h2 class="text-center">{{l.lawyer.username}}</h2>
+              <div class="row">
+                <div
+                  class="col-12 d-flex justify-content-center align-items-center"
+                >
+                  <img
+                    src="{% static 'images/star.png' %}"
+                    style="height: 25px; width: 25px"
+                    alt="Star Image"
+                  />
+                  <img
+                    src="{% static 'images/star.png' %}"
+                    style="height: 25px; width: 25px"
+                    alt="Star Image"
+                  />
+                  <img
+                    src="{% static 'images/star.png' %}"
+                    style="height: 25px; width: 25px"
+                    alt="Star Image"
+                  />
+                  <img
+                    src="{% static 'images/star.png' %}"
+                    style="height: 25px; width: 25px"
+                    alt="Star Image"
+                  />
+                  <img
+                    src="{% static 'images/star.png' %}"
+                    style="height: 25px; width: 25px"
+                    alt="Star Image"
+                  />
+                </div>
+              </div>
+              <hr />
+
+              <form
+                action="{% url 'client_booking' l.lawyer.id %}"
+                method="post"
+              >
+                {% csrf_token %}
+                <div class="mb-3">
+                  <label for="mobile_number" class="form-label">Mobile</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    name="mobile_number"
+                    id="mobile_number"
+                    required
+                    aria-describedby="helpId"
+                    placeholder="Enter Mobile Number"
+                  />
+                </div>
+
+                <div class="row">
+                  <div
+                    class="col-12 d-flex justify-content-center align-items-center"
+                  >
+                    <button class="btn btn-success">Book Now</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        {% endfor %} {% endif %} {% if flag %}
+        <script>
+          swal("Sorry!", "No lawyers found for this case", "error");
+        </script>
+        {% endif %}
+      </div>
+    </div>
+  </body>
+</html>

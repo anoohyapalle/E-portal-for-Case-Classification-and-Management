@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register</title>
+    {% load static %} {% include "includes.html" %}
+    <style>
+      body {
+        background-image: url("{% static 'images/login_page_background.jpg' %}");
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+
+      .navbar-nav.ml-auto {
+        margin-left: auto;
+      }
+
+      .navbar-nav.ml-auto .nav-item {
+        margin-right: 15px;
+      }
+
+      .hover-animation {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hover-animation::after {
+        content: "";
+        display: block;
+        height: 4px;
+        width: 100%;
+        background-color: #2bd576;
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+      }
+
+      .hover-animation:hover::after {
+        transform: scaleX(1);
+      }
+
+      #top_icon {
+        font-size: x-large;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container mt-2">
+      <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+          <a
+            class="navbar-brand text-white"
+            id="top_icon"
+            href="{% url 'home' %}"
+          >
+            Case Classification & Management</a
+          >
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mb-2 ml-auto mb-lg-0">
+              <li class="nav-item">
+                <a
+                  class="nav-link text-white {% if active %} active {% endif %} hover-animation"
+                  href="{% url 'home' %}"
+                  >Home</a
+                >
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link text-white {% if l_active %} active {% endif %} hover-animation"
+                  href="{% url 'login' %}"
+                  >Login</a
+                >
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link text-white hover-animation"
+                  href="{% url 'register' %}"
+                  >Register</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </div>
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col-6">
+          <div class="card">
+            <div class="card-body">
+              <h2 class="text-center">
+                Lawyer & Client Registration
+                <img
+                  style="height: 33px; width: 33px"
+                  src="{% static 'images/lawyer.png' %}"
+                />
+                <hr />
+              </h2>
+              <div class="row">
+                <form action="{% url 'register' %}" method="post">
+                  {% csrf_token %}
+                  <div class="col-12">
+                    <div class="mb-3">
+                      <label for="username" class="form-label">Username</label>
+                      <input
+                        required
+                        type="text"
+                        class="form-control"
+                        name="username"
+                        id="username"
+                        aria-describedby="helpId"
+                        placeholder="Enter your username"
+                      />
+                    </div>
+                    <div class="mb-2">
+                      <label for="password" class="form-label">Password</label>
+                      <input
+                        required
+                        type="password"
+                        class="form-control"
+                        name="password"
+                        id="password"
+                        aria-describedby="helpId"
+                        placeholder="Enter your password"
+                      />
+                    </div>
+
+                    <div class="mb-2">
+                      <label for="lawyer_or_client" class="form-label"
+                        >Choose</label
+                      >
+                      <select
+                        class="form-select"
+                        name="lawyer_or_client"
+                        id="lawyer_or_client"
+                      >
+                        <option value="Lawyer">Lawyer</option>
+                        <option value="Client">Client</option>
+                      </select>
+                    </div>
+
+                    <div class="mb-2">
+                      <label
+                        for="case_values"
+                        id="lawyer_or_client1"
+                        class="form-label"
+                        >Cases</label
+                      >
+                      <select
+                        class="form-select"
+                        name="case_values"
+                        id="case_values"
+                      >
+                        {% for i in court_cases %}
+                        <option value="{{i}}">{{i}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                    <a href="{% url 'login' %}" class="text-secondary">
+                      Already have an account? Login Here!
+                    </a>
+                    <div
+                      class="d-flex mt-4 justify-content-center align-items-center"
+                    >
+                      <button type="submit" class="btn btn-success">
+                        Submit
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% if error_message %}
+    <script>
+      swal("Error!", "Username already exists!", "error");
+    </script>
+    {% endif %}
+
+    <script>
+      document
+        .getElementById("lawyer_or_client")
+        .addEventListener("change", function () {
+          var selectElement = document.getElementById("case_values");
+          var selectElement2 = document.getElementById("lawyer_or_client1");
+          if (this.value === "Lawyer") {
+            selectElement.hidden = false;
+            selectElement2.hidden = false;
+          } else {
+            selectElement.hidden = true;
+            selectElement2.hidden = true;
+          }
+        });
+    </script>
+  </body>
+</html>

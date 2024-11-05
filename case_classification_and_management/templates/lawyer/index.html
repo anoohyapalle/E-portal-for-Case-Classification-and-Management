@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lawyer Home</title>
+    {% load static %} {% include "includes.html" %}
+    <style>
+      .navbar-nav.ml-auto {
+        margin-left: auto;
+      }
+
+      .navbar-nav.ml-auto .nav-item {
+        margin-right: 15px;
+      }
+
+      .hover-animation {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hover-animation::after {
+        content: "";
+        display: block;
+        height: 4px;
+        width: 100%;
+        background-color: #2bd576;
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+      }
+
+      .hover-animation:hover::after {
+        transform: scaleX(1);
+      }
+
+      #top_icon {
+        font-size: x-large;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container mt-2">
+      <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+          <a
+            class="navbar-brand text-dark"
+            id="top_icon"
+            href="{% url 'lawyer_home' %}"
+          >
+            Welcome, {{request.user.username}}</a
+          >
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mb-2 ml-auto mb-lg-0">
+              <li class="nav-item">
+                <a
+                  class="nav-link text-dark {% if active %} active {% endif %} hover-animation"
+                  href="{% url 'lawyer_home' %}"
+                  >Home</a
+                >
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link text-dark {% if l_active %} active {% endif %} hover-animation"
+                  href="#bookings"
+                  >Bookings</a
+                >
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link text-dark hover-animation"
+                  href="{% url 'logout' %}"
+                  >Logout</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </div>
+    <hr />
+    <div class="container mt-2">
+      <div class="row">
+        <div class="col-8 offset-2">
+          <div class="card shadow">
+            <div class="card-body">
+              <h2 class="text-muted">Your Case Types</h2>
+              <hr />
+              {% for i in user_cases %}
+              <div class="row">
+                <div class="col-10">
+                  <input
+                    type="text"
+                    name="{{i.id}}"
+                    value="{{i.case}}"
+                    id="{{i.id}}"
+                    readonly
+                    class="form-control"
+                  />
+                </div>
+                <div class="col-2">
+                  <form
+                    action="{% url 'remove_case_type' i.id %}"
+                    method="post"
+                  >
+                    {% csrf_token %}
+                    <button class="btn btn-danger">Remove</button>
+                  </form>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-3">
+        <div class="col-8 offset-2">
+          <div class="card shadow">
+            <div class="card-body">
+              <h2 class="text-muted">Add Case Types</h2>
+              <hr />
+              {% for case in court_case_classifications %}
+              <form method="POST" action="{% url 'lawyer_home' %}">
+                {% csrf_token %}
+                <div class="row mb-2">
+                  <div class="col-10">
+                    <input
+                      type="text"
+                      name="case"
+                      id="case"
+                      readonly
+                      value="{{case}}"
+                      class="form-control"
+                    />
+                  </div>
+                  <div class="col-2">
+                    <button type="submit" class="btn btn-success">Add</button>
+                  </div>
+                </div>
+              </form>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container mt-5 mb-4">
+      {% if bookings %}
+      <h2 id="bookings" class="text-center">Your Bookings</h2>
+      <div class="row">
+        {% for b in bookings %}
+        <div class="col-8 mb-2 offset-2">
+          <div class="card shadow">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-5">
+                  <div class="mb-3">
+                    <label for="client" class="form-label">Client</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="client"
+                      id="client"
+                      aria-describedby="helpId"
+                      value="{{b.client}}"
+                      readonly
+                    />
+                  </div>
+                </div>
+                <div class="col-5">
+                  <div class="mb-3">
+                    <label for="mobile" class="form-label">Mobile</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="mobile"
+                      id="mobile"
+                      aria-describedby="helpId"
+                      value="{{b.phone_number}}"
+                      readonly
+                    />
+                  </div>
+                </div>
+                <div class="col-2 mt-4">
+                  <form
+                    action="{% url 'lawyer_done_booking' b.id %}"
+                    method="post"
+                  >
+                    {% csrf_token %}
+                    <button class="btn btn-success">Done</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+  </body>
+</html>

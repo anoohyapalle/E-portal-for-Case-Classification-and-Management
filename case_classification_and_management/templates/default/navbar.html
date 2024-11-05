@@ -1,0 +1,78 @@
+<style>
+  .navbar-nav.ml-auto {
+    margin-left: auto;
+  }
+
+  .navbar-nav.ml-auto .nav-item {
+    margin-right: 15px;
+  }
+
+  .hover-animation {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hover-animation::after {
+    content: "";
+    display: block;
+    height: 4px;
+    width: 100%;
+    background-color: #2bd576;
+    transform: scale(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+
+  .hover-animation:hover::after {
+    transform: scale(1);
+  }
+
+  #top_icon {
+    font-size: x-large;
+  }
+</style>
+
+{% load static %}
+<nav class="navbar navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" id="top_icon" href="{% url 'home' %}">
+      Case Classification & Management</a
+    >
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mb-2 ml-auto mb-lg-0">
+        <li class="nav-item">
+          <a
+            class="nav-link {% if active %} active {% endif %} hover-animation"
+            href="{% url 'home' %}"
+            >Home</a
+          >
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link {% if l_active %} active {% endif %} hover-animation"
+            href="{% url 'login' %}"
+            >Login</a
+          >
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link {% if r_active %} active {% endif %} hover-animation"
+            href="{% url 'register' %}"
+            >Register</a
+          >
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
