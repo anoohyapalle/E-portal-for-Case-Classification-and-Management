@@ -1,4 +1,4 @@
-The aim of this mini project is to develop an e-portal which is capable of taking an input pdf file (case 
+The aim of this project is to develop an e-portal which is capable of taking an input pdf file (case 
 sheet) from the client; read and analyse the file with the help of Natural Language Processing libraries 
 or related libraries; categorise the type of case and further provide case related lawyers to the clients 
 along with a provision to have an appointment booked with the corresponding lawyer of their case. 
